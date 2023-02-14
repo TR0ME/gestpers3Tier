@@ -1,6 +1,7 @@
 package fr.imt_atlantique.front.gestion_services;
 
 import java.io.*;
+import java.sql.SQLException;
 import java.util.logging.*;
 import java.util.*;
 
@@ -9,6 +10,8 @@ import java.util.*;
 // import javax.servlet.annotation.WebServlet;
 // import javax.servlet.http.*;
 
+import fr.imt_atlantique.data.model.Personne;
+import fr.imt_atlantique.services.IServicesBeanRemote;
 import jakarta.ejb.EJB;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebServlet;
@@ -21,8 +24,9 @@ import fr.imt_atlantique.services.IServicesBeanLocal;
 /**
  * Servlet implementation class ServicesServlet
  */
+// @remote
 @WebServlet("/ServicesServlet")
-public class ServicesServlet extends HttpServlet {
+public class ServicesServlet extends HttpServlet implements IServicesBeanRemote {
 	private static final long serialVersionUID = 1L;
 
 	@EJB
@@ -39,17 +43,14 @@ public class ServicesServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void doGet(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html;charset=UTF-8");
 		PrintWriter out = response.getWriter();
 		try {
-			listeServices(request.getParameter("tri"),
-					request.getParameter("ordre"), out);
+			listeServices(request.getParameter("tri"), request.getParameter("ordre"), out);
 			out.close();
 		} catch (Exception e) {
-			out.println("<html><body><h3><u>Problème</u></h3><br>"
-					+ e.toString() + "</body></html>");
+			out.println("<html><body><h3><u>Problème</u></h3><br>" + e.toString() + "</body></html>");
 			out.close();
 		} finally {
 			out.close();
@@ -87,6 +88,7 @@ public class ServicesServlet extends HttpServlet {
 		out.println("</table>");
 		out.println("</center><hr>");
 		out.println("<a href=\"index.jsp\">Page principale <img src=\"images/return.gif\" alt=\"return\"></a>");
+		//out.println("<a href=\"https://google.fr\">Google</a>");
 		out.println("</body>");
 		out.println("</html>");
 	}
@@ -141,5 +143,27 @@ public class ServicesServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
+	}
+
+	@Override
+	public List<Service> listeServices(String tri, String ordre) {
+
+		if (tri == null) {
+			tri = "id";
+			ordre = "asc";
+		}
+		List<Service> lstService = services(tri, ordre);
+
+		return lstService;
+	}
+
+	@Override
+	public List<String> listeNomsServices() {
+		List<Service> lstService = listeServices(null, "asc");
+		List<String> nomservice = null;
+		for (Service srv : lstService){
+			nomservice.add(srv.getNom());
+		}
+		return nomservice;
 	}
 }
