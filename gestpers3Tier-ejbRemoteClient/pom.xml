@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>gestpers3Tier-ejbRemoteClient</artifactId>
+  <packaging>jar</packaging>
+  <parent>
+    <artifactId>gestpers3Tier</artifactId>
+    <groupId>fr.imt_atlantique</groupId>
+    <version>1.0-SNAPSHOT</version>
+ </parent>
+  <name>ejbRemoteClient: distant client</name>
+  <!-- FIXME change it to the project's website -->
+  <url>http://www.example.com</url>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+  </properties>
+
+  <dependencies>
+    <!-- Dependency on the EJB module so we can use it's services if needed -->
+    <dependency>
+      <groupId>fr.imt_atlantique</groupId>
+      <artifactId>gestpers3Tier-ejb</artifactId>
+      <type>ejb</type>
+      <!--scope>runtime</scope-->
+    </dependency>
+
+  
+    
+    <dependency>
+      <groupId>javax</groupId>
+      <artifactId>javaee-api</artifactId>
+      <version>7.0</version>
+      <scope>provided</scope>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.wildfly/wildfly-naming-client -->
+      <dependency>
+        <groupId>org.wildfly</groupId>
+        <artifactId>wildfly-naming-client</artifactId>
+        <version>2.0.0.Final</version>
+      </dependency>
+      <!-- https://mvnrepository.com/artifact/org.wildfly.security/wildfly-elytron -->
+      <dependency>
+        <groupId>org.wildfly.security</groupId>
+        <artifactId>wildfly-elytron</artifactId>
+        <version>2.0.0.Final</version>
+      </dependency>
+
+      <dependency>
+          <groupId>org.wildfly</groupId>
+          <artifactId>wildfly-ejb-client-bom</artifactId>
+          <version>27.0.0.Final</version>
+          <type>pom</type>
+          <scope>compile</scope>
+      </dependency> 
+      <dependency>
+          <groupId>org.wildfly</groupId>
+          <artifactId>wildfly-jms-client-bom</artifactId>
+          <version>27.0.0.Final</version>
+          <type>pom</type>
+      </dependency>
+  </dependencies>
+
+  <build>
+    <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
+      <plugins>
+      
+
+        
+        <plugin>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>${version.compiler.plugin}</version>
+        </plugin>
+      
+        <plugin>
+          <!-- Build an executable JAR -->
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>${version.jar.plugin}</version>
+          <configuration>
+            <archive>
+              <manifest>
+                <addClasspath>true</addClasspath>
+                <classpathPrefix>lib/</classpathPrefix>
+                <mainClass>fr.atlantique.imt.ejbremoteclient.MainTXT</mainClass>
+              </manifest>
+            </archive>
+          </configuration>
+        </plugin>
+
+<!--mvn exec:exec -Dexec.mainClass=""-->
+    <plugin>
+      <groupId>org.codehaus.mojo</groupId>
+      <artifactId>exec-maven-plugin</artifactId>
+      <version>${version.exec.plugin}</version>
+      <executions>
+        <execution>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+        </execution>
+      </executions>
+      <configuration>
+        <executable>java</executable>
+        <workingDirectory>${project.build.directory}/exec-working-directory</workingDirectory>
+        <arguments>
+            <argument>-classpath</argument>
+            <classpath />                 
+            <argument>fr.atlantique.imt.ejbremoteclient.MainTXT</argument>
+        </arguments>
+      </configuration>
+    </plugin>
+
+      
+      </plugins>
+    </pluginManagement>
+  </build>
+</project>

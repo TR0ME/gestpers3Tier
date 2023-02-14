@@ -1,0 +1,20 @@
+<configuration>
+    <authentication-client xmlns="urn:elytron:1.0">
+        <authentication-rules>
+            <rule use-configuration="default"/>
+        </authentication-rules>
+        <authentication-configurations>
+            <configuration name="default">
+                <set-user-name name="wildflyuser"/>
+                <credentials>
+                    <clear-password password="wildflypwd"/>
+                </credentials>
+            </configuration>
+        </authentication-configurations>
+    </authentication-client>
+    <jboss-ejb-client xmlns="urn:jboss:wildfly-client-ejb:3.0">
+        <connections>
+            <connection uri="remote+http://10.5.0.6:8080" />
+        </connections>
+    </jboss-ejb-client>
+</configuration>

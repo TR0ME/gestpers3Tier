@@ -1,0 +1,4 @@
+# Project exclude paths
+/gestpers3Tier-ear/target/
+/gestpers3Tier-ejb/target/
+/gestpers3Tier-web/target/
